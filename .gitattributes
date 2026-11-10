@@ -1,2 +1,5 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+
+# Scripts shell toujours en LF
+*.sh text eol=lf
