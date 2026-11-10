@@ -146,6 +146,16 @@ public class ProjectService {
 		return project;
 	}
 
+	/** Espace de travail réservé à l'équipe : charge le projet en exigeant que l'acteur en soit membre. */
+	Project loadForMember(UUID projectId, UUID actorId) {
+		Project project = projects.findById(projectId)
+			.orElseThrow(() -> ApiException.notFound("PROJECT_NOT_FOUND", "Projet introuvable."));
+		if (!project.isMember(actorId)) {
+			throw ApiException.forbidden("NOT_PROJECT_MEMBER", "Réservé aux membres du projet.");
+		}
+		return project;
+	}
+
 	private void applyDetails(Project project, ProjectDetails d) {
 		project.updateDetails(d.name().trim(), trimToNull(d.problem()), trimToNull(d.description()),
 				trimToNull(d.objectives()), trimToNull(d.features()), d.teamSizeLimit(), trimToNull(d.repoUrl()),

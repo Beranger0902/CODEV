@@ -54,7 +54,7 @@ com.novacore
 │   └── domain/        Entités JPA + repositories
 ├── catalog/         Référentiel technologies + domaines (API publique : Catalog)
 ├── profile/         Profil développeur, compétences, domaines, liens, visibilité
-├── project/         Projets, rôles recherchés, candidatures, membres (partie 1)
+├── project/         Projets, candidatures, membres (p.1) + tâches, jalons, Kanban (p.2)
 └── notification/    Envoi d'e-mails (API publique : MailService)
 ```
 
@@ -168,9 +168,25 @@ projet), vérifiées côté serveur à chaque action.
 Règles clés : une candidature ne donne **aucun** accès tant qu'elle n'est pas acceptée ; le OWNER ne
 peut pas quitter sans transférer ; ajouts, retraits, changements de rôle et transferts sont audités.
 
+### Tâches, jalons et Kanban (`project`, partie 2)
+
+Espace de travail **réservé aux membres** du projet (l'accès suit l'acceptation d'une candidature).
+
+| Méthode | Route | Accès |
+|---|---|---|
+| GET | `/api/v1/projects/{id}/board` | membre — tableau Kanban (4 colonnes) |
+| POST | `/api/v1/projects/{id}/tasks` | membre — créer une tâche |
+| PUT | `/api/v1/tasks/{id}` · `/move` · `/dependencies` | membre — éditer, déplacer, lier |
+| DELETE | `/api/v1/tasks/{id}` | auteur ou responsable |
+| GET/POST | `/api/v1/projects/{id}/milestones` | membre (lire) / responsable (créer) |
+| PUT/DELETE | `/api/v1/milestones/{id}` · `/status` | responsable |
+
+Détails : tâches avec statut (TODO/IN_PROGRESS/IN_REVIEW/DONE), priorité, assigné (membre uniquement),
+échéance et jalon ; **dépendances avec détection de cycle** ; progression des jalons (tâches terminées).
+
 ## Prochains modules
 
-`project` partie 2 (tâches, jalons, Kanban) → `qa` → portfolio projets → `moderation`.
+`qa` (questions/réponses) → portfolio projets → `moderation`.
 
 ## Licence
 
