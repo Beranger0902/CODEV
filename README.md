@@ -52,6 +52,7 @@ com.novacore
 │   ├── api/           Contrôleurs + DTO (les entités ne sont jamais exposées)
 │   ├── application/   Cas d'usage, règles, émission des jetons
 │   └── domain/        Entités JPA + repositories
+├── catalog/         Référentiel technologies + domaines (API publique : Catalog)
 └── notification/    Envoi d'e-mails (API publique : MailService)
 ```
 
@@ -113,9 +114,23 @@ Erreurs : format RFC 9457 avec un champ `code` stable (`INVALID_CREDENTIALS`, `E
 Profil `prod` (`SPRING_PROFILES_ACTIVE=prod`) : variables listées dans `.env.example`.
 Swagger est désactivé, l'API attend un reverse proxy TLS de confiance (`forward-headers-strategy: native`).
 
+## Référentiel (`catalog`)
+
+Listes curées réutilisées partout (profils, questions, projets, filtres de recherche).
+
+| Méthode | Route | Accès |
+|---|---|---|
+| GET | `/api/v1/catalog/technologies` | public — filtres `?kind=` et `?search=`, paginé |
+| GET | `/api/v1/catalog/domains` | public |
+| POST/PUT | `/api/v1/admin/catalog/technologies` · `/domains` | ADMIN |
+| PUT | `…/{id}/active` | ADMIN — activer/désactiver sans supprimer |
+
+Données de base chargées par `V3__catalog.sql` (12 domaines, 32 technologies). Les autres
+modules valident leurs références via l'interface `com.novacore.catalog.Catalog`.
+
 ## Prochains modules
 
-`catalog` (technologies, domaines) → `profile` → `project` (candidatures, membres, tâches) → `qa` → `moderation`.
+`profile` (compétences, portfolio) → `project` (candidatures, membres, tâches) → `qa` → `moderation`.
 
 ## Licence
 
