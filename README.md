@@ -53,6 +53,7 @@ com.novacore
 │   ├── application/   Cas d'usage, règles, émission des jetons
 │   └── domain/        Entités JPA + repositories
 ├── catalog/         Référentiel technologies + domaines (API publique : Catalog)
+├── profile/         Profil développeur, compétences, domaines, liens, visibilité
 └── notification/    Envoi d'e-mails (API publique : MailService)
 ```
 
@@ -128,9 +129,24 @@ Listes curées réutilisées partout (profils, questions, projets, filtres de re
 Données de base chargées par `V3__catalog.sql` (12 domaines, 32 technologies). Les autres
 modules valident leurs références via l'interface `com.novacore.catalog.Catalog`.
 
+## Profil développeur (`profile`)
+
+Identité professionnelle, compétences déclarées (référentiel `catalog`), domaines, liens et visibilité.
+
+| Méthode | Route | Accès |
+|---|---|---|
+| GET | `/api/v1/me/profile` | connecté — créé à la volée si absent |
+| PUT | `/api/v1/me/profile` | connecté — infos principales (bio, localisation, expérience…) |
+| PUT | `/api/v1/me/profile/visibility` | connecté — `PUBLIC` / `MEMBERS_ONLY` / `PRIVATE` + localisation |
+| PUT | `/api/v1/me/profile/skills` · `/domains` · `/links` | connecté — remplace la liste, références validées via `Catalog` |
+| GET | `/api/v1/profiles/{username}` | public — respecte la visibilité (jeton optionnel = spectateur) |
+
+Règles : un profil masqué renvoie 404 à un spectateur non autorisé (ne révèle pas son existence) ;
+la localisation est masquable indépendamment ; les compétences et domaines inconnus sont rejetés.
+
 ## Prochains modules
 
-`profile` (compétences, portfolio) → `project` (candidatures, membres, tâches) → `qa` → `moderation`.
+`project` (candidatures, membres, tâches) → `qa` → portfolio projets → `moderation`.
 
 ## Licence
 
