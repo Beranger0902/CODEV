@@ -15,16 +15,15 @@
 	<description>NovaCore - plateforme africaine des developpeurs</description>
 	<url/>
 	<licenses>
-		<license/>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
-	<developers>
-		<developer/>
-	</developers>
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<connection>scm:git:https://github.com/Beranger0902/CODEV.git</connection>
+		<url>https://github.com/Beranger0902/CODEV</url>
 	</scm>
 	<properties>
 		<java.version>25</java.version>

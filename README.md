@@ -116,3 +116,7 @@ Swagger est désactivé, l'API attend un reverse proxy TLS de confiance (`forwar
 ## Prochains modules
 
 `catalog` (technologies, domaines) → `profile` → `project` (candidatures, membres, tâches) → `qa` → `moderation`.
+
+## Licence
+
+Distribué sous licence **Apache 2.0** — voir [LICENSE](LICENSE) et [NOTICE](NOTICE).

@@ -3,3 +3,6 @@
 
 # Scripts shell toujours en LF
 *.sh text eol=lf
+
+# Licence : le texte Apache 2.0 ne doit pas être reformaté par Git
+LICENSE text eol=lf
