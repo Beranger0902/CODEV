@@ -54,6 +54,7 @@ com.novacore
 │   └── domain/        Entités JPA + repositories
 ├── catalog/         Référentiel technologies + domaines (API publique : Catalog)
 ├── profile/         Profil développeur, compétences, domaines, liens, visibilité
+├── project/         Projets, rôles recherchés, candidatures, membres (partie 1)
 └── notification/    Envoi d'e-mails (API publique : MailService)
 ```
 
@@ -144,9 +145,32 @@ Identité professionnelle, compétences déclarées (référentiel `catalog`), d
 Règles : un profil masqué renvoie 404 à un spectateur non autorisé (ne révèle pas son existence) ;
 la localisation est masquable indépendamment ; les compétences et domaines inconnus sont rejetés.
 
+## Projets collaboratifs (`project`, partie 1)
+
+Fiches projet, rôles recherchés, candidatures et équipe. Permissions **contextuelles** (rôle dans le
+projet), vérifiées côté serveur à chaque action.
+
+| Méthode | Route | Accès |
+|---|---|---|
+| GET | `/api/v1/projects` | public — découverte, filtres `status`/`domainId`/`technologyId`/`search` |
+| GET | `/api/v1/projects/{id}` | public — fiche, visibilité respectée |
+| POST | `/api/v1/projects` | connecté — le créateur devient OWNER |
+| PUT | `/api/v1/projects/{id}` · `/status` · `/visibility` · `/roles` | OWNER/MAINTAINER |
+| GET | `/api/v1/me/projects` | connecté — mes projets |
+| POST | `/api/v1/projects/{id}/applications` | connecté — postuler |
+| GET | `/api/v1/projects/{id}/applications` | OWNER/MAINTAINER |
+| POST | `/api/v1/project-applications/{id}/accept` · `/reject` | OWNER/MAINTAINER — accepter crée le membre |
+| POST | `/api/v1/project-applications/{id}/withdraw` | le candidat |
+| GET/DELETE | `/api/v1/projects/{id}/members[/{userId}]` | membres / gestion |
+| PUT | `/api/v1/projects/{id}/members/{userId}/role` | OWNER |
+| POST | `/api/v1/projects/{id}/ownership` | OWNER — transfert de responsabilité |
+
+Règles clés : une candidature ne donne **aucun** accès tant qu'elle n'est pas acceptée ; le OWNER ne
+peut pas quitter sans transférer ; ajouts, retraits, changements de rôle et transferts sont audités.
+
 ## Prochains modules
 
-`project` (candidatures, membres, tâches) → `qa` → portfolio projets → `moderation`.
+`project` partie 2 (tâches, jalons, Kanban) → `qa` → portfolio projets → `moderation`.
 
 ## Licence
 
