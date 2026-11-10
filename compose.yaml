@@ -1,0 +1,23 @@
+# Infrastructure locale de développement.
+# Démarrée automatiquement par Spring Boot (spring-boot-docker-compose) au lancement en profil dev.
+services:
+  postgres:
+    image: 'postgres:17-alpine'
+    environment:
+      - 'POSTGRES_DB=novacore'
+      - 'POSTGRES_USER=novacore'
+      - 'POSTGRES_PASSWORD=novacore'
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'novacore-pgdata:/var/lib/postgresql/data'
+
+  # Capture tous les e-mails envoyés en dev : interface web sur http://localhost:8025
+  mailpit:
+    image: 'axllent/mailpit:latest'
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+
+volumes:
+  novacore-pgdata:

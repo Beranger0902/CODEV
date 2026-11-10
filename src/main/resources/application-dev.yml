@@ -1,0 +1,22 @@
+spring:
+  docker:
+    compose:
+      # Mettre DOCKER_COMPOSE_ENABLED=false si PostgreSQL est installé localement sans Docker.
+      enabled: ${DOCKER_COMPOSE_ENABLED:true}
+  # Utilisé uniquement quand Docker Compose est désactivé (sinon Boot se connecte au conteneur).
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/novacore}
+    username: ${DB_USERNAME:novacore}
+    password: ${DB_PASSWORD:novacore}
+  mail:
+    host: localhost
+    port: 1025
+
+novacore:
+  security:
+    jwt:
+      secret: ${NOVACORE_JWT_SECRET:dev-only-secret-not-for-production-0123456789}
+
+logging:
+  level:
+    com.novacore: DEBUG
